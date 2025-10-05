@@ -1,20 +1,18 @@
-import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
-    const [message, setMessage] = useState("Kraunasi...");
-
-    useEffect(() => {
-        fetch("/api/hello")
-            .then(res => res.text())
-            .then(setMessage)
-            .catch(() => setMessage("Nepavyko pasiekti backend :("));
-    }, []);
-
     return (
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
-            <h1>Padelio rezervacijos sistema</h1>
-            <p>{message}</p>
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Navigate to="/signup" />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/verify" element={<VerifyEmail />} />
+            </Routes>
+        </Router>
     );
 }
 
