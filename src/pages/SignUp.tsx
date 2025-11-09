@@ -9,46 +9,58 @@ export default function SignUp() {
         password: "",
     });
     const [message, setMessage] = useState("");
+    const [isError, setIsError] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    const validateFront = (): string | null => {
+        if (!form.firstName.trim()) return "First name is required";
+        if (!form.lastName.trim()) return "Last name is required";
+        if (!/\S+@\S+\.\S+/.test(form.email)) return "Invalid email format";
+        if (form.password.length < 6) return "Password must be at least 6 characters";
+        return null;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-
+        const frontError = validateFront();
+        if (frontError) {
+            setMessage(frontError);
+            setIsError(true);
+            return;
+        }
 
         try {
             const response = await signUp(form);
             setMessage(response.message);
-        }  catch (err: unknown) {
-        if (err instanceof Error) {
-            console.error("Unexpected error:", err.message);
+            setIsError(false);
+        } catch (err: unknown) {
+            const axiosError = err as { response?: { data?: Record<string, string> } };
+            const errorData = axiosError.response?.data;
+
+            if (errorData) {
+                const firstError =
+                    errorData.email ||
+                    errorData.password ||
+                    errorData.firstName ||
+                    errorData.lastName ||
+                    errorData.error ||
+                    "Validation error";
+                setMessage(firstError);
+            } else {
+                setMessage("Server error – please try again later");
+            }
+            setIsError(true);
         }
-
-        const axiosError = err as { response?: { data?: Record<string, string> } };
-        const errorData = axiosError.response?.data;
-
-        if (errorData) {
-            if (errorData.email) setMessage(errorData.email);
-            else if (errorData.password) setMessage(errorData.password);
-            else if (errorData.firstName) setMessage(errorData.firstName);
-            else if (errorData.lastName) setMessage(errorData.lastName);
-            else if (errorData.error) setMessage(errorData.error);
-            else setMessage("Unknown validation error");
-        } else {
-            setMessage("Server error – please try again later");
-        }
-    }
-
-};
+    };
 
     return (
         <div className="auth-container">
             <div className="auth-card">
                 <h2>Sign Up</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
                     <input
                         className="auth-input"
                         type="text"
@@ -56,7 +68,6 @@ export default function SignUp() {
                         placeholder="First name"
                         value={form.firstName}
                         onChange={handleChange}
-                        required
                     />
                     <input
                         className="auth-input"
@@ -65,7 +76,6 @@ export default function SignUp() {
                         placeholder="Last name"
                         value={form.lastName}
                         onChange={handleChange}
-                        required
                     />
                     <input
                         className="auth-input"
@@ -74,7 +84,6 @@ export default function SignUp() {
                         placeholder="Email"
                         value={form.email}
                         onChange={handleChange}
-                        required
                     />
                     <input
                         className="auth-input"
@@ -83,13 +92,23 @@ export default function SignUp() {
                         placeholder="Password"
                         value={form.password}
                         onChange={handleChange}
-                        required
                     />
                     <button className="auth-button" type="submit">
                         Register
                     </button>
                 </form>
-                <p className="auth-message">{message}</p>
+
+                {message && (
+                    <p
+                        className="auth-message"
+                        style={{
+                            fontWeight: "bold",
+                            color: isError ? "#ff4d4d" : "#00e676",
+                        }}
+                    >
+                        {message}
+                    </p>
+                )}
 
                 <p
                     style={{
@@ -99,10 +118,7 @@ export default function SignUp() {
                     }}
                 >
                     Already have an account?{" "}
-                    <a
-                        href="/login"
-                        style={{ color: "#5ce1e6", textDecoration: "none" }}
-                    >
+                    <a href="/login" style={{ color: "#5ce1e6", textDecoration: "none" }}>
                         Log in
                     </a>
                 </p>
