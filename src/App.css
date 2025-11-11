@@ -153,3 +153,85 @@ body {
   opacity: 0.9;
 }
 
+/* --- MODAL STILIUS --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content {
+  background-color: #141a21;
+  padding: 30px 40px;
+  border-radius: 14px;
+  width: 400px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  animation: slideUp 0.35s ease-in-out;
+}
+
+.modal-content h3 {
+  color: #5ce1e6;
+  margin-bottom: 20px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* --- TOAST PRANEŠIMAI --- */
+.toast {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  background-color: #141a21;
+  color: #e6edf3;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  font-weight: 600;
+  min-width: 220px;
+  text-align: center;
+  z-index: 2000;
+  animation: slideIn 0.4s ease, fadeOut 0.4s ease 1.8s forwards;
+}
+
+.toast-success {
+  border-left: 6px solid #00e676;
+}
+
+.toast-error {
+  border-left: 6px solid #ff4d4d;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
