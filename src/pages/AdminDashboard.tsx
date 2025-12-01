@@ -50,12 +50,12 @@ export default function AdminDashboard() {
         null
     );
 
-    // 🧭 Puslapiavimas
+    // Puslapiavimas
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const token = localStorage.getItem("token");
 
-    // ⏳ Auto išjungimas toast
+    // Auto išjungimas toast
     useEffect(() => {
         if (toast) {
             const timer = setTimeout(() => setToast(null), 2000);
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
         }
     }, [toast]);
 
-    // 🔄 Užkrauna aikšteles su puslapiavimu
+    // Užkrauna aikšteles su puslapiavimu
     const loadCourts = async (newPage = page) => {
         try {
             const res = await axios.get<PagedResponse>(
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // 🧩 Kurti naują aikštelę
+    // Kurti naują aikštelę
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -120,7 +120,7 @@ export default function AdminDashboard() {
 
     };
 
-    // 🔘 Aktyvumo keitimas
+    // Aktyvumo keitimas
     const handleToggleActive = async (courtId: string, isActive: boolean) => {
         try {
             await axios.patch(
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
         }
     };
 
-    // 🕓 Redagavimo funkcijos
+    // Redagavimo funkcijos
     const handleEditClick = (court: Court) => {
         setEditCourt(court);
         setEditForm({
@@ -163,12 +163,28 @@ export default function AdminDashboard() {
             setToast({ message: "✅ Schedule updated successfully!", type: "success" });
             setEditCourt(null);
             await loadCourts(page);
-        } catch {
-            setToast({ message: "❌ Failed to update schedule.", type: "error" });
+        } catch (error: unknown) {
+            let backendMsg = "❌ Failed to update schedule.";
+
+            if (axios.isAxiosError(error)) {
+                const data = error.response?.data;
+                if (typeof data === "string") {
+                    backendMsg = `❌ ${data}`;
+                } else if (data?.message) {
+                    backendMsg = `❌ ${data.message}`;
+                } else if (data?.error) {
+                    backendMsg = `❌ ${data.error}`;
+                } else if (data?.details) {
+                    backendMsg = `❌ ${data.details}`;
+                }
+            }
+
+            setToast({ message: backendMsg, type: "error" });
         }
     };
 
-    // 🧭 Pagination valdymas
+
+    //  Pagination valdymas
     const handleNextPage = () => {
         if (page < totalPages) loadCourts(page + 1);
     };
@@ -296,7 +312,7 @@ export default function AdminDashboard() {
                         ))}
                     </div>
 
-                    {/* 🧭 Pagination */}
+                    {/* Pagination */}
                     <div
                         style={{
                             display: "flex",
@@ -342,7 +358,7 @@ export default function AdminDashboard() {
                 </div>
             </div>
 
-            {/* 🕓 Modal Redagavimui */}
+            {/* Modal Redagavimui */}
             {editCourt && (
                 <div className="modal-overlay" onClick={() => setEditCourt(null)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -396,7 +412,7 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {/* 🔔 Toast pranešimas */}
+            {/* Toast pranešimas */}
             {toast && <Toast message={toast.message} type={toast.type} />}
         </div>
     );

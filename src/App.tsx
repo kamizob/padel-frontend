@@ -9,6 +9,7 @@ import CourtSchedule from "./pages/CourtSchedule";
 import './App.css';
 import AdminDashboard from "./pages/AdminDashboard";
 import MyBookings from "./pages/MyBookings";
+import ProfilePage from "./pages/ProfilePage.tsx";
 import Navbar from "./components/NavBar";
 
 function AppContent() {
@@ -30,6 +31,8 @@ function AppContent() {
                     <Route path="/courts/:courtId/schedule" element={<CourtSchedule />} />
                     <Route path="/admin" element={<AdminDashboard />} />
                     <Route path="/bookings/my" element={<MyBookings />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+
                 </Routes>
             </div>
         </>

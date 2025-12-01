@@ -21,7 +21,7 @@ export default function CourtSchedule() {
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
-    // 🕐 Užkraunam tvarkaraštį
+    //  Užkraunam tvarkaraštį
     useEffect(() => {
         axios
             .get(`http://localhost:8080/api/schedule/${courtId}?date=${selectedDate}`, {
@@ -31,22 +31,40 @@ export default function CourtSchedule() {
             .catch((err) => console.error("Failed to load schedule:", err));
     }, [courtId, selectedDate]);
 
+    // Pasirenkam slotą
     const handleSlotClick = (slot: string) => {
         setSelectedSlot(slot);
         setMessage(`Selected slot: ${slot}`);
     };
 
+    //  Patikrina, ar slotas yra praeityje (tik jei šiandien)
+    const isSlotInPast = (slot: string): boolean => {
+        const [start] = slot.split(" - ");
+        const slotStart = new Date(`${selectedDate}T${start}:00`);
+        const now = new Date();
+        const isToday = selectedDate === now.toISOString().split("T")[0];
+        return isToday && slotStart < now;
+    };
+
+    // Rezervavimas
     const handleReserve = async () => {
         if (!selectedSlot) {
             setMessage("❌ Please select a time slot first.");
             return;
         }
 
-        try {
-            const [start, end] = selectedSlot.split(" - ");
-            const startTime = `${selectedDate}T${start}:00`;
-            const endTime = `${selectedDate}T${end}:00`;
+        const [start, end] = selectedSlot.split(" - ");
+        const startTime = `${selectedDate}T${start}:00`;
+        const endTime = `${selectedDate}T${end}:00`;
 
+        //  Neleidžiam praeities laiko
+        const now = new Date();
+        if (new Date(startTime) < now) {
+            setMessage("❌ You cannot book a time in the past.");
+            return;
+        }
+
+        try {
             await axios.post(
                 "http://localhost:8080/api/bookings",
                 { courtId, startTime, endTime },
@@ -56,7 +74,7 @@ export default function CourtSchedule() {
             setMessage("✅ Booking created successfully!");
             setSelectedSlot(null);
 
-            // 🔄 Atnaujinam laisvų laikų sąrašą
+            //  Atnaujinam laisvų laikų sąrašą
             const res = await axios.get(
                 `http://localhost:8080/api/schedule/${courtId}?date=${selectedDate}`,
                 { headers: { Authorization: `Bearer ${token}` } }
@@ -68,6 +86,7 @@ export default function CourtSchedule() {
         }
     };
 
+    // Jei dar krauna
     if (!schedule) {
         return (
             <div className="auth-container">
@@ -78,6 +97,7 @@ export default function CourtSchedule() {
         );
     }
 
+    //  UI
     return (
         <div className="auth-container">
             <div className="auth-card">
@@ -102,32 +122,46 @@ export default function CourtSchedule() {
                         onChange={(e) => setSelectedDate(e.target.value)}
                         className="auth-input"
                         style={{ maxWidth: "200px" }}
+                        min={new Date().toISOString().split("T")[0]} // 👈 neleidžia praeities dienų
                     />
                 </div>
 
-                {/* 🎾 Laiko slotai */}
+                {/* Laiko slotai */}
                 <div className="slots-grid">
-                    {schedule.slots.map((s, index) => (
-                        <button
-                            key={index}
-                            className="slot-button"
-                            style={{
-                                backgroundColor:
-                                    s === selectedSlot ? "#5ce1e6" : "#0d1117",
-                                color: s === selectedSlot ? "#0b0f14" : "#e6edf3",
-                                border:
-                                    s === selectedSlot
+                    {schedule.slots.map((s, index) => {
+                        const past = isSlotInPast(s);
+                        const isSelected = s === selectedSlot;
+                        return (
+                            <button
+                                key={index}
+                                className="slot-button"
+                                disabled={past}
+                                style={{
+                                    backgroundColor: isSelected
+                                        ? "#5ce1e6"
+                                        : past
+                                            ? "#2b3036"
+                                            : "#0d1117",
+                                    color: isSelected
+                                        ? "#0b0f14"
+                                        : past
+                                            ? "#777"
+                                            : "#e6edf3",
+                                    border: isSelected
                                         ? "2px solid #5ce1e6"
                                         : "1px solid #5ce1e6",
-                            }}
-                            onClick={() => handleSlotClick(s)}
-                        >
-                            {s}
-                        </button>
-                    ))}
+                                    cursor: past ? "not-allowed" : "pointer",
+                                    opacity: past ? 0.6 : 1,
+                                }}
+                                onClick={() => !past && handleSlotClick(s)}
+                            >
+                                {s}
+                            </button>
+                        );
+                    })}
                 </div>
 
-                {/* 💬 Žinutė / klaida */}
+                {/* Žinutė */}
                 {message && (
                     <p
                         style={{
@@ -140,13 +174,12 @@ export default function CourtSchedule() {
                     </p>
                 )}
 
-                {/* 🔘 Rezervavimo mygtukas */}
+                {/* Rezervavimo mygtukas */}
                 <button
                     className="auth-button"
                     style={{
                         marginTop: "20px",
-                        background:
-                            "linear-gradient(135deg, #00c853, #5ce1e6)",
+                        background: "linear-gradient(135deg, #00c853, #5ce1e6)",
                         opacity: selectedSlot ? 1 : 0.5,
                         cursor: selectedSlot ? "pointer" : "not-allowed",
                     }}
@@ -156,14 +189,13 @@ export default function CourtSchedule() {
                     Reserve Selected Time
                 </button>
 
-                {/* 🔙 Grįžti atgal */}
+                {/* Grįžti atgal */}
                 <button
                     onClick={() => navigate("/courts")}
                     className="auth-button"
                     style={{
                         marginTop: "10px",
-                        background:
-                            "linear-gradient(135deg, #ff4b2b, #ff416c)",
+                        background: "linear-gradient(135deg, #ff4b2b, #ff416c)",
                     }}
                 >
                     Back to Courts

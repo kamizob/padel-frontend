@@ -45,7 +45,7 @@ export default function Navbar() {
                 flexWrap: "wrap",
             }}
         >
-            {/* 🔹 Kairė pusė – logotipas + nuorodos */}
+            {/* Kairė pusė – logotipas + nuorodos */}
             <div
                 style={{
                     display: "flex",
@@ -72,11 +72,12 @@ export default function Navbar() {
                 <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
                     <NavLink to="/courts" label="Courts" />
                     <NavLink to="/bookings/my" label="My Reservations" />
+                    <NavLink to="/profile" label="Profile" />
                     {userRole === "ADMIN" && <NavLink to="/admin" label="Admin Panel" />}
                 </div>
             </div>
 
-            {/* 🔹 Dešinė pusė – logout */}
+            {/* Dešinė pusė – logout */}
             {token && (
                 <button
                     onClick={handleLogout}
@@ -102,7 +103,7 @@ export default function Navbar() {
     );
 }
 
-/* 🔸 Atskiras komponentas nuorodoms su hover efektu */
+/* Atskiras komponentas nuorodoms su hover efektu */
 function NavLink({ to, label }: { to: string; label: string }) {
     return (
         <Link
