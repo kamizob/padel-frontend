@@ -26,22 +26,32 @@ export default function MyBookings() {
     const [selectedBooking, setSelectedBooking] = useState<MyBooking | null>(null);
     const [courtDetails, setCourtDetails] = useState<CourtDetails | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
     // Užkrauna vartotojo rezervacijas
-    const loadBookings = async () => {
+    const loadBookings = async (newPage = 1) => {
         try {
-            const res = await axios.get("http://localhost:8080/api/bookings/my", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setBookings(res.data);
+            const res = await axios.get(
+                `http://localhost:8080/api/bookings/my?page=${newPage - 1}&size=5`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+
+            setBookings(res.data.bookings);
+            setPage(res.data.page + 1);
+            setTotalPages(res.data.totalPages);
             setMessage("");
         } catch (err) {
             console.error("Failed to load bookings:", err);
             setMessage("❌ Failed to load your reservations.");
         }
     };
+
 
     // Užkrauna konkrečios aikštelės informaciją
     const loadCourtDetails = async (courtId: string) => {
@@ -57,7 +67,7 @@ export default function MyBookings() {
     };
 
     useEffect(() => {
-        void loadBookings();
+        void loadBookings(1);
     }, []);
 
     // Kai pasirenki rezervaciją, iš karto parsiunčia ir aikštelės info
@@ -90,7 +100,7 @@ export default function MyBookings() {
 
             setMessage("✅ Booking cancelled successfully!");
             setSelectedBooking(null);
-            await loadBookings();
+            await loadBookings(page);
         } catch (err) {
             console.error("Failed to cancel booking:", err);
             setMessage("❌ Failed to cancel booking.");
@@ -127,16 +137,18 @@ export default function MyBookings() {
                             borderCollapse: "collapse",
                             marginTop: "15px",
                             fontSize: "0.95rem",
+                            tableLayout: "fixed" // 💡 priverčia stulpelius turėti normalų plotį
                         }}
                     >
                         <thead>
                         <tr style={{ color: "#5ce1e6", textAlign: "left" }}>
-                            <th style={{ paddingBottom: "8px" }}>Court</th>
-                            <th style={{ paddingBottom: "8px" }}>Start</th>
-                            <th style={{ paddingBottom: "8px" }}>End</th>
-                            <th style={{ paddingBottom: "8px" }}>Status</th>
+                            <th style={{ padding: "10px 20px" }}>Court</th>
+                            <th style={{ padding: "10px 20px" }}>Start</th>
+                            <th style={{ padding: "10px 20px" }}>End</th>
+                            <th style={{ padding: "10px 20px" }}>Status</th>
                         </tr>
                         </thead>
+
                         <tbody>
                         {bookings.map((b) => (
                             <tr
@@ -147,21 +159,21 @@ export default function MyBookings() {
                                     transition: "background 0.2s ease",
                                 }}
                                 onClick={() => setSelectedBooking(b)}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "#151a1f")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = "transparent")
-                                }
+                                onMouseEnter={(e) => (e.currentTarget.style.background = "#151a1f")}
+                                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                             >
-                                <td style={{ padding: "8px 0", color: "#5ce1e6", fontWeight: "bold" }}>
+                                <td style={{ padding: "12px 20px", color: "#5ce1e6", fontWeight: "bold" }}>
                                     {b.courtName}
                                 </td>
-                                <td style={{ padding: "8px 0" }}>{formatDateTime(b.startTime)}</td>
-                                <td style={{ padding: "8px 0" }}>{formatDateTime(b.endTime)}</td>
+                                <td style={{ padding: "12px 20px" }}>
+                                    {formatDateTime(b.startTime)}
+                                </td>
+                                <td style={{ padding: "12px 20px" }}>
+                                    {formatDateTime(b.endTime)}
+                                </td>
                                 <td
                                     style={{
-                                        padding: "8px 0",
+                                        padding: "12px 20px",
                                         color: !b.isActive
                                             ? "#ff4d4d"
                                             : new Date(b.endTime) < new Date()
@@ -180,7 +192,49 @@ export default function MyBookings() {
                         ))}
                         </tbody>
                     </table>
+
                 )}
+                {/* Pagination */}
+                {bookings.length > 0 && (
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginTop: "15px",
+                            gap: "10px",
+                        }}
+                    >
+                        <button
+                            className="auth-button"
+                            disabled={page === 1}
+                            onClick={() => loadBookings(page - 1)}
+                            style={{
+                                opacity: page === 1 ? 0.5 : 1,
+                                cursor: page === 1 ? "not-allowed" : "pointer",
+                            }}
+                        >
+                            ⬅ Prev
+                        </button>
+
+                        <span style={{ color: "#b2becd" }}>
+            Page {page} of {totalPages}
+        </span>
+
+                        <button
+                            className="auth-button"
+                            disabled={page === totalPages}
+                            onClick={() => loadBookings(page + 1)}
+                            style={{
+                                opacity: page === totalPages ? 0.5 : 1,
+                                cursor: page === totalPages ? "not-allowed" : "pointer",
+                            }}
+                        >
+                            Next ➡
+                        </button>
+                    </div>
+                )}
+
 
                 <button
                     onClick={() => navigate("/courts")}
@@ -193,6 +247,8 @@ export default function MyBookings() {
                     Back to Courts
                 </button>
             </div>
+
+
 
             {/*  Modal su rezervacijos informacija */}
             {selectedBooking && (
