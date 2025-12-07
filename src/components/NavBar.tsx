@@ -73,7 +73,15 @@ export default function Navbar() {
                     <NavLink to="/courts" label="Courts" />
                     <NavLink to="/bookings/my" label="My Reservations" />
                     <NavLink to="/profile" label="Profile" />
-                    {userRole === "ADMIN" && <NavLink to="/admin" label="Admin Panel" />}
+                    {(userRole === "ADMIN" || userRole === "SUPER_ADMIN") && (
+                        <NavLink to="/admin" label="Courts Admin" />
+                    )}
+
+                    {userRole === "SUPER_ADMIN" && (
+                        <NavLink to="/admin/users" label="User Roles" />
+                    )}
+
+
                 </div>
             </div>
 

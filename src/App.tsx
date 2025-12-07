@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import MyBookings from "./pages/MyBookings";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import Navbar from "./components/NavBar";
+import AdminUsers from "./pages/AdminUsers.tsx";
 
 function AppContent() {
     const location = useLocation();
@@ -32,6 +33,8 @@ function AppContent() {
                     <Route path="/admin" element={<AdminDashboard />} />
                     <Route path="/bookings/my" element={<MyBookings />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/admin/users" element={<AdminUsers />} />
+
 
                 </Routes>
             </div>
