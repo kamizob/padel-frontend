@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 
@@ -21,7 +21,7 @@ interface PagedResponse {
 }
 
 // Toast komponentas
-function Toast({ message, type }: { message: string; type: "success" | "error" }) {
+function Toast({message, type}: { message: string; type: "success" | "error" }) {
     return (
         <div className={`toast ${type === "success" ? "toast-success" : "toast-error"}`}>
             {message}
@@ -68,14 +68,14 @@ export default function AdminDashboard() {
         try {
             const res = await axios.get<PagedResponse>(
                 `http://localhost:8080/api/courts/paged?page=${newPage}&size=5`,
-                { headers: { Authorization: `Bearer ${token}` } }
+                {headers: {Authorization: `Bearer ${token}`}}
             );
             setCourts(res.data.courts);
             setPage(res.data.page);
             setTotalPages(res.data.totalPages);
         } catch (err) {
             console.error("Failed to fetch courts:", err);
-            setToast({ message: "❌ Failed to load courts.", type: "error" });
+            setToast({message: "❌ Failed to load courts.", type: "error"});
         }
     };
 
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
 
     // Kurti naują aikštelę
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setForm({...form, [e.target.name]: e.target.value});
     };
 
     const handleCreate = async (e: React.FormEvent) => {
@@ -94,9 +94,9 @@ export default function AdminDashboard() {
         setFormError("");
         try {
             await axios.post("http://localhost:8080/api/courts", form, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {Authorization: `Bearer ${token}`},
             });
-            setToast({ message: "✅ Court created successfully!", type: "success" });
+            setToast({message: "✅ Court created successfully!", type: "success"});
             setForm({
                 name: "",
                 location: "",
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
                     backendMsg;
             }
 
-            setToast({ message: backendMsg, type: "error" });
+            setToast({message: backendMsg, type: "error"});
         }
 
     };
@@ -125,8 +125,8 @@ export default function AdminDashboard() {
         try {
             await axios.patch(
                 `http://localhost:8080/api/courts/${courtId}`,
-                { isActive: !isActive },
-                { headers: { Authorization: `Bearer ${token}` } }
+                {isActive: !isActive},
+                {headers: {Authorization: `Bearer ${token}`}}
             );
             setToast({
                 message: `Court ${!isActive ? "activated" : "deactivated"} successfully!`,
@@ -134,7 +134,7 @@ export default function AdminDashboard() {
             });
             await loadCourts(page);
         } catch {
-            setToast({ message: "❌ Failed to update court status.", type: "error" });
+            setToast({message: "❌ Failed to update court status.", type: "error"});
         }
     };
 
@@ -149,7 +149,7 @@ export default function AdminDashboard() {
     };
 
     const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEditForm({ ...editForm, [e.target.name]: e.target.value });
+        setEditForm({...editForm, [e.target.name]: e.target.value});
     };
 
     const handleSaveEdit = async () => {
@@ -158,9 +158,9 @@ export default function AdminDashboard() {
             await axios.patch(
                 `http://localhost:8080/api/courts/${editCourt.id}/schedule`,
                 editForm,
-                { headers: { Authorization: `Bearer ${token}` } }
+                {headers: {Authorization: `Bearer ${token}`}}
             );
-            setToast({ message: "✅ Schedule updated successfully!", type: "success" });
+            setToast({message: "✅ Schedule updated successfully!", type: "success"});
             setEditCourt(null);
             await loadCourts(page);
         } catch (error: unknown) {
@@ -179,7 +179,7 @@ export default function AdminDashboard() {
                 }
             }
 
-            setToast({ message: backendMsg, type: "error" });
+            setToast({message: backendMsg, type: "error"});
         }
     };
 
@@ -198,9 +198,9 @@ export default function AdminDashboard() {
                 {/* Kairė pusė – pridėjimo forma */}
                 <div className="admin-card">
                     <h2>Admin Panel ⚙️</h2>
-                    <p style={{ color: "#b2becd" }}>Manage courts and schedules</p>
+                    <p style={{color: "#b2becd"}}>Manage courts and schedules</p>
 
-                    <form onSubmit={handleCreate} style={{ marginTop: "20px" }}>
+                    <form onSubmit={handleCreate} style={{marginTop: "20px"}}>
                         <input
                             className="auth-input"
                             name="name"
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
                     </form>
 
                     {formError && (
-                        <p style={{ color: "#ff4d4d", marginTop: "10px", fontWeight: "bold", textAlign: "center" }}>
+                        <p style={{color: "#ff4d4d", marginTop: "10px", fontWeight: "bold", textAlign: "center"}}>
                             {formError}
                         </p>
                     )}
@@ -276,9 +276,9 @@ export default function AdminDashboard() {
                         {courts.map((c) => (
                             <div key={c.id} className="court-card">
                                 <strong>{c.name}</strong> — {c.location}
-                                <br />
+                                <br/>
                                 {c.openingTime}–{c.closingTime} | Slot: {c.slotMinutes} min
-                                <br />
+                                <br/>
                                 Status:{" "}
                                 <span
                                     style={{
@@ -288,7 +288,7 @@ export default function AdminDashboard() {
                                 >
                                     {c.isActive ? "Active" : "Inactive"}
                                 </span>
-                                <br />
+                                <br/>
                                 <button
                                     onClick={() => handleToggleActive(c.id, c.isActive)}
                                     className="toggle-btn"
@@ -413,7 +413,7 @@ export default function AdminDashboard() {
             )}
 
             {/* Toast pranešimas */}
-            {toast && <Toast message={toast.message} type={toast.type} />}
+            {toast && <Toast message={toast.message} type={toast.type}/>}
         </div>
     );
 }

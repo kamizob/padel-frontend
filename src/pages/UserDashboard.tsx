@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 interface Court {
@@ -20,7 +20,7 @@ export default function UserDashboard() {
         const fetchCourts = async () => {
             try {
                 const res = await axios.get("http://localhost:8080/api/courts", {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: {Authorization: `Bearer ${token}`},
                 });
                 setCourts(res.data);
             } catch (err) {
@@ -33,18 +33,18 @@ export default function UserDashboard() {
 
     return (
         <div className="auth-container">
-            <div className="auth-card" style={{ maxWidth: "600px" }}>
+            <div className="auth-card" style={{maxWidth: "600px"}}>
                 <h2> Available Courts</h2>
-                <p style={{ color: "#b2becd" }}>Browse and see current schedules</p>
+                <p style={{color: "#b2becd"}}>Browse and see current schedules</p>
 
                 {message && <p className="auth-message">{message}</p>}
 
-                <ul style={{ textAlign: "left", marginTop: "20px" }}>
+                <ul style={{textAlign: "left", marginTop: "20px"}}>
                     {courts.map((c) => (
-                        <li key={c.id} style={{ marginBottom: "12px" }}>
-                            <strong>{c.name}</strong> — {c.location} <br />
-                            Hours: {c.openingTime}–{c.closingTime} <br />
-                            Slot: {c.slotMinutes} min <br />
+                        <li key={c.id} style={{marginBottom: "12px"}}>
+                            <strong>{c.name}</strong> — {c.location} <br/>
+                            Hours: {c.openingTime}–{c.closingTime} <br/>
+                            Slot: {c.slotMinutes} min <br/>
                             <span
                                 style={{
                                     color: c.isActive ? "#00e676" : "#ff4d4d",

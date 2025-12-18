@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 interface JwtPayload {
     sub: string; // email (subject)
@@ -28,7 +28,7 @@ export default function Dashboard() {
                 <div className="auth-card">
                     <h2>Welcome 🎾</h2>
                     <p>You are not logged in.</p>
-                    <a href="/login" style={{ color: "#5ce1e6" }}>
+                    <a href="/login" style={{color: "#5ce1e6"}}>
                         Go to Login
                     </a>
                 </div>
@@ -56,7 +56,7 @@ export default function Dashboard() {
 
                 <button
                     className="auth-button"
-                    style={{ marginTop: "20px", background: "#5ce1e6" }}
+                    style={{marginTop: "20px", background: "#5ce1e6"}}
                     onClick={handleViewCourts}
                 >
                     View Courts

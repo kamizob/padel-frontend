@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { signUp } from "../api/auth";
+import {useState} from "react";
+import {signUp} from "../api/auth";
 
 export default function SignUp() {
     const [form, setForm] = useState({
@@ -12,7 +12,7 @@ export default function SignUp() {
     const [isError, setIsError] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setForm({...form, [e.target.name]: e.target.value});
     };
 
     const validateFront = (): string | null => {
@@ -118,7 +118,7 @@ export default function SignUp() {
                     }}
                 >
                     Already have an account?{" "}
-                    <a href="/login" style={{ color: "#5ce1e6", textDecoration: "none" }}>
+                    <a href="/login" style={{color: "#5ce1e6", textDecoration: "none"}}>
                         Log in
                     </a>
                 </p>

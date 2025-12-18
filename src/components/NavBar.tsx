@@ -97,7 +97,7 @@ export default function Navbar() {
                         padding: "6px 14px",
                         fontWeight: 500,
                         cursor: "pointer",
-                        marginRight: "40px", // 👈 šiek tiek atitraukta nuo krašto
+                        marginRight: "40px",
                         marginTop: "5px",
                         transition: "transform 0.2s ease, opacity 0.2s ease",
                     }}

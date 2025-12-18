@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 
 interface ScheduleResponse {
@@ -9,7 +9,7 @@ interface ScheduleResponse {
 }
 
 export default function CourtSchedule() {
-    const { courtId } = useParams();
+    const {courtId} = useParams();
     const [schedule, setSchedule] = useState<ScheduleResponse | null>(null);
     const [selectedDate, setSelectedDate] = useState<string>(() => {
         const today = new Date().toISOString().split("T")[0];
@@ -25,7 +25,7 @@ export default function CourtSchedule() {
     useEffect(() => {
         axios
             .get(`http://localhost:8080/api/schedule/${courtId}?date=${selectedDate}`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {Authorization: `Bearer ${token}`},
             })
             .then((res) => setSchedule(res.data))
             .catch((err) => console.error("Failed to load schedule:", err));
@@ -67,8 +67,8 @@ export default function CourtSchedule() {
         try {
             await axios.post(
                 "http://localhost:8080/api/bookings",
-                { courtId, startTime, endTime },
-                { headers: { Authorization: `Bearer ${token}` } }
+                {courtId, startTime, endTime},
+                {headers: {Authorization: `Bearer ${token}`}}
             );
 
             setMessage("✅ Booking created successfully!");
@@ -77,7 +77,7 @@ export default function CourtSchedule() {
             //  Atnaujinam laisvų laikų sąrašą
             const res = await axios.get(
                 `http://localhost:8080/api/schedule/${courtId}?date=${selectedDate}`,
-                { headers: { Authorization: `Bearer ${token}` } }
+                {headers: {Authorization: `Bearer ${token}`}}
             );
             setSchedule(res.data);
         } catch (err) {
@@ -104,7 +104,7 @@ export default function CourtSchedule() {
                 <h2>{schedule.courtName} 🕒</h2>
 
                 {/* 📅 Pasirinkti datą */}
-                <div style={{ marginBottom: "15px" }}>
+                <div style={{marginBottom: "15px"}}>
                     <label
                         htmlFor="date"
                         style={{
@@ -121,7 +121,7 @@ export default function CourtSchedule() {
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
                         className="auth-input"
-                        style={{ maxWidth: "200px" }}
+                        style={{maxWidth: "200px"}}
                         min={new Date().toISOString().split("T")[0]} // 👈 neleidžia praeities dienų
                     />
                 </div>

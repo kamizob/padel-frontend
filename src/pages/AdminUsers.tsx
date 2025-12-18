@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
+import {useNavigate} from "react-router-dom";
 
 interface User {
     id: string;
@@ -88,7 +88,7 @@ export default function AdminUsers() {
                     newRole,
                 },
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: {Authorization: `Bearer ${token}`},
                 }
             );
 
@@ -107,9 +107,9 @@ export default function AdminUsers() {
 
     return (
         <div className="auth-container">
-            <div className="auth-card" style={{ maxWidth: "700px", width: "100%", overflow: "hidden" }}>
+            <div className="auth-card" style={{maxWidth: "700px", width: "100%", overflow: "hidden"}}>
                 <h2>User Management 👥</h2>
-                <p style={{ color: "#b2becd" }}>Manage user roles and verification status</p>
+                <p style={{color: "#b2becd"}}>Manage user roles and verification status</p>
 
                 {message && (
                     <p
@@ -134,7 +134,7 @@ export default function AdminUsers() {
                     }}
                 >
                     <thead>
-                    <tr style={{ color: "#5ce1e6" }}>
+                    <tr style={{color: "#5ce1e6"}}>
                         <th>Email</th>
                         <th>Name</th>
                         <th>Role</th>
@@ -151,13 +151,13 @@ export default function AdminUsers() {
                                 borderRadius: "8px",
                             }}
                         >
-                            <td style={{ padding: "10px" }}>{u.email}</td>
-                            <td style={{ padding: "10px" }}>
+                            <td style={{padding: "10px"}}>{u.email}</td>
+                            <td style={{padding: "10px"}}>
                                 {u.firstName} {u.lastName}
                             </td>
 
                             {/* ROLE BADGE */}
-                            <td style={{ padding: "10px" }}>
+                            <td style={{padding: "10px"}}>
                                     <span
                                         style={{
                                             padding: "4px 10px",
@@ -167,22 +167,22 @@ export default function AdminUsers() {
                                             background:
                                                 u.role === "USER"
                                                     ? "linear-gradient(135deg, #5ce1e6, #00c853)"
-                                                    :"linear-gradient(135deg, #ff4b2b, #ff416c)" ,
+                                                    : "linear-gradient(135deg, #ff4b2b, #ff416c)",
                                         }}
                                     >
                                         {u.role}
                                     </span>
                             </td>
 
-                            <td style={{ padding: "10px" }}>
+                            <td style={{padding: "10px"}}>
                                 {u.isVerified ? (
-                                    <span style={{ color: "#00e676" }}>Verified</span>
+                                    <span style={{color: "#00e676"}}>Verified</span>
                                 ) : (
-                                    <span style={{ color: "#ff4d4d" }}>Not verified</span>
+                                    <span style={{color: "#ff4d4d"}}>Not verified</span>
                                 )}
                             </td>
 
-                            <td style={{ padding: "10px" }}>
+                            <td style={{padding: "10px"}}>
                                 <button
                                     onClick={() => openRoleModal(u)}
                                     className="auth-button"
@@ -220,7 +220,7 @@ export default function AdminUsers() {
                         ⬅ Prev
                     </button>
 
-                    <span style={{ color: "#b2becd" }}>
+                    <span style={{color: "#b2becd"}}>
                         Page {page + 1} of {totalPages}
                     </span>
 
@@ -246,10 +246,10 @@ export default function AdminUsers() {
                     <div
                         className="modal-content"
                         onClick={(e) => e.stopPropagation()}
-                        style={{ width: "350px" }}
+                        style={{width: "350px"}}
                     >
                         <h3>Change Role</h3>
-                        <p style={{ color: "#b2becd" }}>
+                        <p style={{color: "#b2becd"}}>
                             {selectedUser.email}
                         </p>
 
@@ -257,7 +257,7 @@ export default function AdminUsers() {
                             value={newRole}
                             onChange={(e) => setNewRole(e.target.value)}
                             className="auth-input"
-                            style={{ marginTop: "10px" }}
+                            style={{marginTop: "10px"}}
                         >
                             <option value="USER">USER</option>
                             <option value="ADMIN">ADMIN</option>

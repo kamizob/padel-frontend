@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 interface MyBooking {
     id: string;
@@ -38,7 +38,7 @@ export default function MyBookings() {
             const res = await axios.get(
                 `http://localhost:8080/api/bookings/my?page=${newPage - 1}&size=5`,
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: {Authorization: `Bearer ${token}`},
                 }
             );
 
@@ -57,7 +57,7 @@ export default function MyBookings() {
     const loadCourtDetails = async (courtId: string) => {
         try {
             const res = await axios.get(`http://localhost:8080/api/courts/${courtId}`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {Authorization: `Bearer ${token}`},
             });
             setCourtDetails(res.data);
         } catch (err) {
@@ -95,7 +95,7 @@ export default function MyBookings() {
             await axios.patch(
                 `http://localhost:8080/api/bookings/${bookingId}/cancel`,
                 {},
-                { headers: { Authorization: `Bearer ${token}` } }
+                {headers: {Authorization: `Bearer ${token}`}}
             );
 
             setMessage("✅ Booking cancelled successfully!");
@@ -111,9 +111,9 @@ export default function MyBookings() {
 
     return (
         <div className="auth-container">
-            <div className="auth-card" style={{ maxWidth: "700px" }}>
+            <div className="auth-card" style={{maxWidth: "700px"}}>
                 <h2>My Reservations 🎾</h2>
-                <p style={{ color: "#b2becd", marginBottom: "15px" }}>
+                <p style={{color: "#b2becd", marginBottom: "15px"}}>
                     View and manage your bookings
                 </p>
 
@@ -129,7 +129,7 @@ export default function MyBookings() {
                 )}
 
                 {bookings.length === 0 ? (
-                    <p style={{ color: "#b2becd" }}>No reservations found.</p>
+                    <p style={{color: "#b2becd"}}>No reservations found.</p>
                 ) : (
                     <table
                         style={{
@@ -141,11 +141,11 @@ export default function MyBookings() {
                         }}
                     >
                         <thead>
-                        <tr style={{ color: "#5ce1e6", textAlign: "left" }}>
-                            <th style={{ padding: "10px 20px" }}>Court</th>
-                            <th style={{ padding: "10px 20px" }}>Start</th>
-                            <th style={{ padding: "10px 20px" }}>End</th>
-                            <th style={{ padding: "10px 20px" }}>Status</th>
+                        <tr style={{color: "#5ce1e6", textAlign: "left"}}>
+                            <th style={{padding: "10px 20px"}}>Court</th>
+                            <th style={{padding: "10px 20px"}}>Start</th>
+                            <th style={{padding: "10px 20px"}}>End</th>
+                            <th style={{padding: "10px 20px"}}>Status</th>
                         </tr>
                         </thead>
 
@@ -162,13 +162,13 @@ export default function MyBookings() {
                                 onMouseEnter={(e) => (e.currentTarget.style.background = "#151a1f")}
                                 onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                             >
-                                <td style={{ padding: "12px 20px", color: "#5ce1e6", fontWeight: "bold" }}>
+                                <td style={{padding: "12px 20px", color: "#5ce1e6", fontWeight: "bold"}}>
                                     {b.courtName}
                                 </td>
-                                <td style={{ padding: "12px 20px" }}>
+                                <td style={{padding: "12px 20px"}}>
                                     {formatDateTime(b.startTime)}
                                 </td>
-                                <td style={{ padding: "12px 20px" }}>
+                                <td style={{padding: "12px 20px"}}>
                                     {formatDateTime(b.endTime)}
                                 </td>
                                 <td
@@ -217,7 +217,7 @@ export default function MyBookings() {
                             ⬅ Prev
                         </button>
 
-                        <span style={{ color: "#b2becd" }}>
+                        <span style={{color: "#b2becd"}}>
             Page {page} of {totalPages}
         </span>
 
@@ -247,7 +247,6 @@ export default function MyBookings() {
                     Back to Courts
                 </button>
             </div>
-
 
 
             {/*  Modal su rezervacijos informacija */}
@@ -283,21 +282,21 @@ export default function MyBookings() {
                             textAlign: "center",
                         }}
                     >
-                        <h3 style={{ color: "#5ce1e6" }}>{selectedBooking.courtName}</h3>
+                        <h3 style={{color: "#5ce1e6"}}>{selectedBooking.courtName}</h3>
                         {courtDetails ? (
-                            <p style={{ color: "#b2becd", marginTop: "10px" }}>
+                            <p style={{color: "#b2becd", marginTop: "10px"}}>
                                 📍 <strong>Location:</strong> {courtDetails.location}
-                                <br />
+                                <br/>
                                 🕒 <strong>Working hours:</strong>{" "}
                                 {courtDetails.openingTime}–{courtDetails.closingTime}
                             </p>
                         ) : (
-                            <p style={{ color: "#b2becd" }}>Loading court details...</p>
+                            <p style={{color: "#b2becd"}}>Loading court details...</p>
                         )}
 
-                        <p style={{ color: "#b2becd", marginTop: "10px" }}>
-                            <strong>Start:</strong> {formatDateTime(selectedBooking.startTime)} <br />
-                            <strong>End:</strong> {formatDateTime(selectedBooking.endTime)} <br />
+                        <p style={{color: "#b2becd", marginTop: "10px"}}>
+                            <strong>Start:</strong> {formatDateTime(selectedBooking.startTime)} <br/>
+                            <strong>End:</strong> {formatDateTime(selectedBooking.endTime)} <br/>
                             <strong>Status:</strong>{" "}
                             <span
                                 style={{

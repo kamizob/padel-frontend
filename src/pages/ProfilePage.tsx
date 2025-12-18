@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 
 interface UserProfile {
@@ -33,7 +33,7 @@ export default function ProfilePage() {
     const loadProfile = useCallback(async () => {
         try {
             const res = await axios.get("http://localhost:8080/api/user/me", {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {Authorization: `Bearer ${token}`},
             });
 
             setProfile(res.data);
@@ -59,7 +59,7 @@ export default function ProfilePage() {
     // Form change handler
     // ------------------------
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setForm({...form, [e.target.name]: e.target.value});
         setIsChanged(true);
     };
 
@@ -110,7 +110,7 @@ export default function ProfilePage() {
 
         try {
             await axios.patch("http://localhost:8080/api/user/profile", payload, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {Authorization: `Bearer ${token}`},
             });
 
             setMessage("✅ Profile updated successfully!");
@@ -145,16 +145,16 @@ export default function ProfilePage() {
 
     return (
         <div className="auth-container">
-            <div className="auth-card" style={{ maxWidth: "450px" }}>
+            <div className="auth-card" style={{maxWidth: "450px"}}>
                 <h2>My Profile 👤</h2>
-                <p style={{ color: "#b2becd" }}>Email: {profile.email}</p>
-                <p style={{ color: "#b2becd" }}>
+                <p style={{color: "#b2becd"}}>Email: {profile.email}</p>
+                <p style={{color: "#b2becd"}}>
                     Role: {profile.role} | {profile.isVerified ? "✅ Verified" : "❌ Not Verified"}
                 </p>
                 <form onSubmit={handleSave}>
 
                     {/* BASIC INFO */}
-                    <h3 style={{ marginTop: "10px", color: "#c3c6d1" }}>Profile Info</h3>
+                    <h3 style={{marginTop: "10px", color: "#c3c6d1"}}>Profile Info</h3>
 
                     <input
                         className="auth-input"
@@ -193,14 +193,14 @@ export default function ProfilePage() {
                                 cursor: "pointer",
                             }}
                         >
-                            <h3 style={{ margin: 0, color: "#d1d5db" }}>Change Password</h3>
-                            <span style={{ fontSize: "15px", color: "#9ca3af" }}>
+                            <h3 style={{margin: 0, color: "#d1d5db"}}>Change Password</h3>
+                            <span style={{fontSize: "15px", color: "#9ca3af"}}>
                 {showPasswordChange ? "▲" : "▼"}
             </span>
                         </div>
 
                         {showPasswordChange && (
-                            <div style={{ marginTop: "15px", width: "100%" }}>
+                            <div style={{marginTop: "15px", width: "100%"}}>
 
                                 <input
                                     className="auth-input"
@@ -209,7 +209,7 @@ export default function ProfilePage() {
                                     placeholder="Current password"
                                     value={form.oldPassword}
                                     onChange={handleChange}
-                                    style={{ width: "100%" }}
+                                    style={{width: "100%"}}
                                 />
 
                                 <input
@@ -219,7 +219,7 @@ export default function ProfilePage() {
                                     placeholder="New password (min 6 chars)"
                                     value={form.newPassword}
                                     onChange={handleChange}
-                                    style={{ width: "100%" }}
+                                    style={{width: "100%"}}
                                 />
                             </div>
                         )}
@@ -238,8 +238,6 @@ export default function ProfilePage() {
                         💾 Save Changes
                     </button>
                 </form>
-
-
 
 
                 {message && (

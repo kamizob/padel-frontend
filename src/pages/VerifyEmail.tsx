@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { verifyEmail } from "../api/auth";
+import {useEffect, useState} from "react";
+import {useSearchParams} from "react-router-dom";
+import {verifyEmail} from "../api/auth";
 
 export default function VerifyEmail() {
     const [params] = useSearchParams();

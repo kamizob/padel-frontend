@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 interface Court {
     id: string;
@@ -28,7 +28,7 @@ export default function CourtsList() {
         try {
             const res = await axios.get<PagedResponse>(
                 `http://localhost:8080/api/courts/active/paged?page=${newPage}&size=5`,
-                { headers: { Authorization: `Bearer ${token}` } }
+                {headers: {Authorization: `Bearer ${token}`}}
             );
             setCourts(res.data.courts);
             setPage(res.data.page);
@@ -59,7 +59,7 @@ export default function CourtsList() {
                     <p>No active courts found.</p>
                 ) : (
                     <>
-                        <ul style={{ textAlign: "left", listStyle: "none", padding: 0 }}>
+                        <ul style={{textAlign: "left", listStyle: "none", padding: 0}}>
                             {courts.map((c) => (
                                 <li
                                     key={c.id}
@@ -71,9 +71,9 @@ export default function CourtsList() {
                                     }}
                                 >
                                     <strong>{c.name}</strong> — {c.location}
-                                    <br />
+                                    <br/>
                                     {c.openingTime}–{c.closingTime}
-                                    <br />
+                                    <br/>
                                     <button
                                         onClick={() => navigate(`/courts/${c.id}/schedule`)}
                                         style={{
@@ -115,7 +115,7 @@ export default function CourtsList() {
                                 ⬅ Prev
                             </button>
 
-                            <span style={{ color: "#b2becd" }}>
+                            <span style={{color: "#b2becd"}}>
                                 Page {page} of {totalPages}
                             </span>
 

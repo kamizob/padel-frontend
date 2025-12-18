@@ -1,15 +1,15 @@
-import { useState } from "react";
-import { login } from "../api/auth";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {login} from "../api/auth";
+import {useNavigate} from "react-router-dom";
 
 export default function Login() {
-    const [form, setForm] = useState({ email: "", password: "" });
+    const [form, setForm] = useState({email: "", password: ""});
     const [message, setMessage] = useState("");
     const [isError, setIsError] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setForm({...form, [e.target.name]: e.target.value});
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -72,9 +72,9 @@ export default function Login() {
                         {message}
                     </p>
                 )}
-                <p style={{ marginTop: "15px", fontSize: "0.9rem", color: "#b2becd" }}>
+                <p style={{marginTop: "15px", fontSize: "0.9rem", color: "#b2becd"}}>
                     Don’t have an account?{" "}
-                    <a href="/signup" style={{ color: "#5ce1e6", textDecoration: "none" }}>
+                    <a href="/signup" style={{color: "#5ce1e6", textDecoration: "none"}}>
                         Sign up
                     </a>
                 </p>
